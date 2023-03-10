@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -25,13 +26,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void changeUser(long id, User updatedUser) {
-        User userToUpdate = getUserById(id);
-        userToUpdate.setUsername(updatedUser.getUsername());
-        userToUpdate.setPassword(new BCryptPasswordEncoder().encode(updatedUser.getPassword()));
-        userToUpdate.setEmail(updatedUser.getEmail());
-        entityManager.merge(userToUpdate);
+    public void updateUser(User user) {
+        entityManager.merge(user);
     }
+//    @Override
+//    public void changeUser(long id, User updatedUser) {
+//        User userToUpdate = getUserById(id);
+//        userToUpdate.setUsername(updatedUser.getUsername());
+//        userToUpdate.setPassword(new BCryptPasswordEncoder().encode(updatedUser.getPassword()));
+//        userToUpdate.setEmail(updatedUser.getEmail());
+//        entityManager.merge(userToUpdate);
+//    }
 
     @Override
     public void deleteUser(long id) {
@@ -44,9 +49,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByUsername(String Username) {
+    public User getUserByUsername(String username) {
 
         return entityManager.createQuery("select user from User user where user.username =: username", User.class)
-                .setParameter("username", Username).getSingleResult();
+                .setParameter("username", username).getSingleResult();
     }
 }

@@ -15,7 +15,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserDao userDao;
 
-
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -25,6 +24,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userDao.allUsers();
     }
 
+    @Override
+    @Transactional
+    public void updateUser(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userDao.updateUser(user);
+    }
+
     @Transactional
     @Override
     public void addUser(User user) {
@@ -32,11 +38,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userDao.addUser(user);
     }
 
-    @Transactional
-    @Override
-    public void changeUser(long id, User updatesUser) {
-        userDao.changeUser(id, updatesUser);
-    }
+//    @Transactional
+//    @Override
+//    public void changeUser(long id, User updatesUser) {
+//        userDao.changeUser(id, updatesUser);
+//    }
 
     @Transactional
     @Override
@@ -51,7 +57,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        return userDao.getUserByUsername(name);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userDao.getUserByUsername(username);
     }
 }
