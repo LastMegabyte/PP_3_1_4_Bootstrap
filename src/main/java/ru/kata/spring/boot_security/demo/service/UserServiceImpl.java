@@ -33,9 +33,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public void addUser(User user) {
+    public boolean addUser(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        if(userDao.getUserByUsername(user.getUsername()) != null) {
+            return false;
+        }
         userDao.addUser(user);
+        return true;
     }
 
 //    @Transactional

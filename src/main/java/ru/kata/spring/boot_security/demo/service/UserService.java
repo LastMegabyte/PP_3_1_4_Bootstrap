@@ -8,7 +8,7 @@ public interface UserService {
 
     List<User> allUsers();
 
-    void addUser(User user);
+    boolean addUser(User user);
 
     void updateUser(User user);
 
